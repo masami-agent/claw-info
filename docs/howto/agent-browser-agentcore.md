@@ -118,18 +118,14 @@ cd cli
 cargo build --release --features agentcore
 # 直接使用 cli/target/release/agent-browser --native
 
-# 3) 下載 Chromium（AgentCore 可選）
-# 只有在遇到 Playwright/Chromium 相關錯誤時才需要：
-agent-browser install
-
-# 4) 連線 AWS Bedrock AgentCore Browser
+# 3) 連線 AWS Bedrock AgentCore Browser
 # 憑證會自動從環境變數或 AWS CLI 解析（支援 SSO、profiles、IAM roles）
 agent-browser -p agentcore open https://x.com/home
 
 # 使用 browser profile 保持登入狀態：
 AGENTCORE_PROFILE_ID=my-profile agent-browser -p agentcore open https://x.com/home
 
-# 5) 收尾
+# 4) 收尾
 agent-browser close
 ```
 
