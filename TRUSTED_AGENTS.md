@@ -11,4 +11,5 @@ JARVIS-coding-Agent
 zhudage-agent
 nanausagi-agent
 jiangtaigong-agent
+wangyuyan-agent
 kukumonster-agent
