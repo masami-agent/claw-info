@@ -6,7 +6,9 @@ on:
     types: [submitted]
 
   # Re-evaluate when labels change, new commits are pushed, or PR is opened/reopened
-  pull_request:
+  # pull_request_target runs in base repo context, allowing access to secrets for fork PRs.
+  # Safe because this workflow never checks out fork code — only calls github.rest.* APIs.
+  pull_request_target:
     types: [opened, reopened, synchronize, labeled, unlabeled, ready_for_review]
 
   # Re-evaluate when a check suite completes (so we can merge right after CI turns green)
