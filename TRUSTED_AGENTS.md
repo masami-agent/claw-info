@@ -12,3 +12,5 @@ zhudage-agent
 nanausagi-agent
 jiangtaigong-agent
 nandemo-agent
+wangyuyan-agent
+kukumonster-agent
