@@ -21,6 +21,29 @@ Telegram 論壇群組（Forum Group）支援將對話分成多個獨立的 **Top
 
 ---
 
+## 常見問題（FAQ）
+
+**Q：我已經在 openclaw 設定了 OpenAI LLM，為什麼還需要 Codex ACP？**
+
+兩者解決的是不同層次的問題：
+
+| | openclaw 內建 LLM（含 OpenAI） | Codex ACP |
+|---|---|---|
+| 執行位置 | openclaw 程序內 | 獨立外部程序 |
+| 工具使用 | 依 openclaw 插件 | Codex 原生（讀寫檔案、執行 shell） |
+| Session 狀態 | 依 openclaw 記憶設定 | Codex 自身的 persistent session |
+| 模型設定 | openclaw config | Codex CLI 自身設定 |
+
+簡單說：openclaw 內建 LLM 負責「對話」，Codex ACP 負責「代理執行任務」。  
+如果你希望在 Telegram topic 中讓 Codex **直接操作檔案、執行指令、完成多步驟任務**，就需要 ACP binding，而不是讓 openclaw 的 LLM 代為轉發。
+
+**Q：ACP binding 和 hook relay 有什麼差別？**
+
+- **Hook relay**：訊息先進入 openclaw LLM，再由 hook 腳本轉發給外部代理，會觸發本地 LLM 一次
+- **ACP binding**：訊息直接路由到 ACP session，完全跳過本地 LLM，延遲更低、不消耗本地模型資源
+
+---
+
 ## 架構圖
 
 ```
