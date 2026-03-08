@@ -19,31 +19,6 @@ Telegram 論壇群組（Forum Group）支援將對話分成多個獨立的 **Top
 - **Topic = ACP Session**：每個 topic 永久對應一個獨立的 ACP session，多個 topic 即可同時管理多個 ACP session，彼此上下文完全隔離
 - **精確隔離**：`requireMention` 可精確到 topic 層級，避免多 bot 在同群組互相搶答
 
----
-
-## 常見問題（FAQ）
-
-**Q：我已經在 openclaw 設定了 OpenAI LLM，為什麼還需要 Codex ACP？**
-
-兩者解決的是不同層次的問題：
-
-| | openclaw 內建 LLM（含 OpenAI） | Codex ACP |
-|---|---|---|
-| 執行位置 | openclaw 程序內 | 獨立外部程序 |
-| 工具使用 | 依 openclaw 插件 | Codex 原生（讀寫檔案、執行 shell） |
-| Session 狀態 | 依 openclaw 記憶設定 | Codex 自身的 persistent session |
-| 模型設定 | openclaw config | Codex CLI 自身設定 |
-
-簡單說：openclaw 內建 LLM 負責「對話」，Codex ACP 負責「代理執行任務」。  
-如果你希望在 Telegram topic 中讓 Codex **直接操作檔案、執行指令、完成多步驟任務**，就需要 ACP binding，而不是讓 openclaw 的 LLM 代為轉發。
-
-**Q：ACP binding 和 hook relay 有什麼差別？**
-
-- **Hook relay**：訊息先進入 openclaw LLM，再由 hook 腳本轉發給外部代理，會觸發本地 LLM 一次
-- **ACP binding**：訊息直接路由到 ACP session，完全跳過本地 LLM，延遲更低、不消耗本地模型資源
-
----
-
 ## 架構圖
 
 ```
@@ -277,3 +252,24 @@ sessionKey=agent:guan-yu:telegram:group:-100xxxxxxxxxx:topic:2
 - `cwd` 決定 ACP 代理讀取哪個工作區的 SOUL.md 與記憶，建議指向擁有者代理的 workspace。
 - Gateway 重啟後 openclaw 會自動重新協調 ACP binding session。
 - 若 hot-reload 因 secrets timeout 失敗，手動重啟：`systemctl --user restart openclaw-gateway.service`
+
+## 常見問題（FAQ）
+
+**Q：我已經在 openclaw 設定了 OpenAI LLM，為什麼還需要 Codex ACP？**
+
+兩者解決的是不同層次的問題：
+
+| | openclaw 內建 LLM（含 OpenAI） | Codex ACP |
+|---|---|---|
+| 執行位置 | openclaw 程序內 | 獨立外部程序 |
+| 工具使用 | 依 openclaw 插件 | Codex 原生（讀寫檔案、執行 shell） |
+| Session 狀態 | 依 openclaw 記憶設定 | Codex 自身的 persistent session |
+| 模型設定 | openclaw config | Codex CLI 自身設定 |
+
+簡單說：openclaw 內建 LLM 負責「對話」，Codex ACP 負責「代理執行任務」。  
+如果你希望在 Telegram topic 中讓 Codex **直接操作檔案、執行指令、完成多步驟任務**，就需要 ACP binding，而不是讓 openclaw 的 LLM 代為轉發。
+
+**Q：ACP binding 和 hook relay 有什麼差別？**
+
+- **Hook relay**：訊息先進入 openclaw LLM，再由 hook 腳本轉發給外部代理，會觸發本地 LLM 一次
+- **ACP binding**：訊息直接路由到 ACP session，完全跳過本地 LLM，延遲更低、不消耗本地模型資源
