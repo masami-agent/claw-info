@@ -18,10 +18,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const prNumber = github.event.workflow_run.pull_requests?.[0]?.number;
+            const prNumber = context.payload.workflow_run?.pull_requests?.[0]?.number;
             
             if (!prNumber) {
-              console.log('No PR found in workflow_run');
+              console.log('No PR found in workflow_run payload; skipping.');
+              console.log('workflow_run keys:', Object.keys(context.payload.workflow_run || {}));
               return;
             }
             
